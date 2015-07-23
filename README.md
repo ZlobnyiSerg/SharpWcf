@@ -5,7 +5,7 @@ Easy multi-service WCF configurator from code or files
 
 Let's imagine you have two (or more) services:
 
-```
+```csharp
 public class ServiceA : IServiceA
 {
     public void Operation1()
@@ -16,7 +16,7 @@ public class ServiceA : IServiceA
 
 and some other service:
 
-```
+```csharp
 public class ServiceB : IServiceB
 {
     public void Operation2()
@@ -29,7 +29,7 @@ Now example for hosting:
 
 Use old style *App.config* settings to setup behaviors and bindings:
 
-```
+```xml
 <configuration>
   <system.serviceModel>
 
@@ -56,7 +56,7 @@ Use old style *App.config* settings to setup behaviors and bindings:
 
 and put address-related data in *JSON* configuration:
 
-```
+```json
 {
   "Services": [
     {
