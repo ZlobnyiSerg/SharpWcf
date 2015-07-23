@@ -16,7 +16,7 @@ namespace SharpWcf.Demo
             var host2 = r.CreateHost<ServiceB>();
             host2.Open();
 
-            var cli1 = new ClientFactory(ClientsConfiguration.LoadFromJson("clients.config.json")).CreateChannel<IServiceA>();
+            var cli1 = new ClientFactory(ClientsConfiguration.LoadFromJson("clients.config.json")).CreateClient<IServiceA>();
             Console.WriteLine(cli1.Operation1());
 
             Console.WriteLine("Services are created and listening. Press ENTER to terminate...");

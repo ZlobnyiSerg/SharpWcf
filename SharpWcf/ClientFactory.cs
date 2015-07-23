@@ -16,7 +16,7 @@ namespace SharpWcf
             _configuration = configuration;
         }
 
-        public TContract CreateChannel<TContract>() where TContract : class
+        public ServiceEndpoint CreateEndpoint<TContract>() where TContract : class
         {
             var config = _configuration.GetClientConfiguration(typeof (TContract));
             var contractDescription = ContractDescription.GetContract(typeof(TContract));
@@ -39,9 +39,12 @@ namespace SharpWcf
                 endpoint.Address = new EndpointAddress(new Uri(addr, UriKind.RelativeOrAbsolute));
             }
 
-            var factory = new ChannelFactory<TContract>(endpoint);
-            
-            return factory.CreateChannel();
+            return endpoint;            
+        }
+
+        public TContract CreateClient<TContract>() where TContract : class
+        {
+            return new ChannelFactory<TContract>(CreateEndpoint<TContract>()).CreateChannel();
         }
 
         private void ApplyBehavior(ServiceEndpoint host, string behavior)
