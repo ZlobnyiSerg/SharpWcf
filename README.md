@@ -21,9 +21,7 @@ public class ServiceB : IServiceB
 }
 ```
 
-Now example for hosting:
-
-Use old style *App.config* settings to setup behaviors and bindings:
+Use *App.config* settings to setup behaviors and bindings:
 
 ```xml
 <configuration>
@@ -86,3 +84,13 @@ var host = factory.CreateHost<ServiceA>();
 host.Open();
 ```
 
+Services are now hosted by following addresses:
+
+* ServiceA:
+    1. net.tcp://localhost:20001/ServiceA/
+    2. http://localhost:20002/ServiceA/
+    
+* ServiceB:
+    1. net.tcp://localhost:20001/ServiceB/
+    2. http://localhost:20002/ServiceB/
+    
