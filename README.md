@@ -54,7 +54,7 @@ Use old style *App.config* settings to setup behaviors and bindings:
 </configuration>
 ```
 
-and put address-related data in *JSON* configuration:
+and put endpoint-related data in *JSON* configuration (this will be applied to all services):
 
 ```json
 {
