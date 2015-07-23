@@ -81,3 +81,12 @@ and put address-related data in *JSON* configuration:
   ]
 }
 ```
+
+Configure and host services from code:
+
+```csharp
+var factory = new ServiceFactory(ServicesConfiguration.LoadFromJson("services.config.json"));
+var host = factory.CreateHost<ServiceA>();
+host.Open();
+```
+
