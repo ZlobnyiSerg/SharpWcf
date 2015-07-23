@@ -5,18 +5,14 @@ Easy multi-service WCF configurator from code or files
 
 Let's imagine you have two (or more) services:
 
-```
+```csharp
 public class ServiceA : IServiceA
 {
     public void Operation1()
     {
     }
 }
-```
 
-and some other service:
-
-```
 public class ServiceB : IServiceB
 {
     public void Operation2()
@@ -25,11 +21,9 @@ public class ServiceB : IServiceB
 }
 ```
 
-Now example for hosting:
+Use *App.config* settings to setup behaviors and bindings:
 
-Use old style *App.config* settings to setup behaviors and bindings:
-
-```
+```xml
 <configuration>
   <system.serviceModel>
 
@@ -54,9 +48,9 @@ Use old style *App.config* settings to setup behaviors and bindings:
 </configuration>
 ```
 
-and put address-related data in *JSON* configuration:
+and put endpoint-related data in *JSON* configuration (this will be applied to all services):
 
-```
+```json
 {
   "Services": [
     {
@@ -81,3 +75,22 @@ and put address-related data in *JSON* configuration:
   ]
 }
 ```
+
+Configure and host services from code:
+
+```csharp
+var factory = new ServiceFactory(ServicesConfiguration.LoadFromJson("services.config.json"));
+var host = factory.CreateHost<ServiceA>();
+host.Open();
+```
+
+Services are now hosted by following addresses:
+
+* ServiceA:
+    1. net.tcp://localhost:20001/ServiceA/
+    2. http://localhost:20002/ServiceA/
+    
+* ServiceB:
+    1. net.tcp://localhost:20001/ServiceB/
+    2. http://localhost:20002/ServiceB/
+    
