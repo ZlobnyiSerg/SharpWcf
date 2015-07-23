@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SharpWcf</id>
+    <version>0.1.0</version>
+    <authors>Quirco</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Easy multi-service WCF configurator from code or files</description>
+    <dependencies>
+        <dependency id="Common.Logging" version="3.2.0" />
+        <dependency id="Newtonsoft.Json" version="7.0.1" />
+    </dependencies>
+
+  </metadata>
+  <files>
+    <file src="SharpWcf.*" target="lib/net40" />
+  </files>
+</package>

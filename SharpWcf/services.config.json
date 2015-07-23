@@ -1,0 +1,56 @@
+{
+  "Services": [
+    {
+      "BaseAddresses": [
+        "net.tcp://localhost:53001/*",
+        "https://localhost:8098/*"
+      ],
+      "Behavior": "LogusServiceBehavior",
+      "AddAuthPolicy": true,
+      "Endpoints": [
+        {
+          "Address": "/unp/",
+          "Binding": "System.ServiceModel.NetTcpBinding, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "BindingConfiguration": "LogusTcpBinding_UserNamePasswordAuth"
+        },
+        {
+          "Address": "/wa/",
+          "Binding": "System.ServiceModel.NetTcpBinding, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "BindingConfiguration": "LogusTcpBinding_WindowsAuth"
+        },
+        {
+          "Address": "/",
+          "Binding": "System.ServiceModel.WebHttpBinding, System.ServiceModel.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
+          "BindingConfiguration": "WebBinding"
+        }
+      ]
+    },
+    {
+      "Types": [ "Quirco.Common.Launcher.Server.AutoUpdateService" ],
+      "AddAuthPolicy": false,
+      "Endpoints": [
+        {
+          "Address": "",
+          "Binding": "System.ServiceModel.NetTcpBinding, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "BindingConfiguration": "LogusTcpBinding"
+        },
+        {
+          "Address": "/",
+          "Binding": "System.ServiceModel.WebHttpBinding, System.ServiceModel.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35",
+          "BindingConfiguration": "WebBinding"
+        }
+      ]
+    },
+    {
+      "Types": [ "Logus.HMS.BL.NotificationService" ],
+      "AddAuthPolicy": true,
+      "Endpoints": [
+        {
+          "Address": "",
+          "Binding": "System.ServiceModel.NetTcpBinding, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+          "BindingConfiguration": "LogusTcpBinding"
+        }
+      ]
+    }
+  ]
+}
