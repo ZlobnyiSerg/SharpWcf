@@ -12,11 +12,7 @@ public class ServiceA : IServiceA
     {
     }
 }
-```
 
-and some other service:
-
-```csharp
 public class ServiceB : IServiceB
 {
     public void Operation2()
