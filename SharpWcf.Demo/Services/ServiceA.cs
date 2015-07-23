@@ -1,12 +1,13 @@
-﻿using SharpWcf.Demo.Contracts;
+﻿using System;
+using SharpWcf.Demo.Contracts;
 
 namespace SharpWcf.Demo.Services
 {
     public class ServiceA : IServiceA
     {
-        public void Operation1()
+        public string Operation1()
         {
-            throw new System.NotImplementedException();
+            return "Hello from service! "+DateTime.Now;
         }
     }
 }

@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -53,11 +54,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientFactory.cs" />
+    <Compile Include="Configuration\ClientConfiguration.cs" />
+    <Compile Include="Configuration\ClientsConfiguration.cs" />
+    <Compile Include="Configuration\ConfigLoader.cs" />
     <Compile Include="Configuration\ServiceConfiguration.cs" />
     <Compile Include="Configuration\ServiceEndpointConfiguration.cs" />
     <Compile Include="Configuration\ServicesConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactory.cs" />
+    <Compile Include="WcfFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -37,19 +37,7 @@ namespace SharpWcf.Configuration
         /// <returns></returns>
         public static ServicesConfiguration LoadFromJson(string fileName)
         {
-            var localFileName = fileName + ".local";
-
-            if (File.Exists(localFileName))
-            {                
-                fileName = localFileName;
-            }
-
-            if (!File.Exists(fileName))
-                throw new ApplicationException("Unable to find services configuration: " + fileName);
-
-            var config = JsonConvert.DeserializeObject<ServicesConfiguration>(File.ReadAllText(fileName));
-
-            return config;
+            return ConfigLoader.LoadConfig<ServicesConfiguration>(fileName);
         }
 
         public ServiceConfiguration GetServiceConfiguration(Type type)

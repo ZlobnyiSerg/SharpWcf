@@ -6,6 +6,6 @@ namespace SharpWcf.Demo.Contracts
     public interface IServiceA
     {
         [OperationContract]
-        void Operation1();
+        string Operation1();
     }
 }

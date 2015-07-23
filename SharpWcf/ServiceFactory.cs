@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
 using Common.Logging;
@@ -11,7 +10,7 @@ using SharpWcf.Configuration;
 
 namespace SharpWcf
 {
-    public class ServiceFactory
+    public class ServiceFactory : WcfFactory
     {
         protected static readonly ILog Log = LogManager.GetLogger<ServicesConfiguration>();
         private readonly ServicesConfiguration _configuration;
@@ -77,17 +76,7 @@ namespace SharpWcf
             {
                 ApplyBehavior(host, config.Behavior);
             }
-        }
-
-        private Binding CreateBindingObjectByName(string bindingType, string bindingConfigName)
-        {
-            var type = Type.GetType(bindingType, true, true);
-
-            if (type == null)
-                throw new InvalidOperationException("Unable to instantiate type: " + bindingType);
-
-            return (Binding)Activator.CreateInstance(type, bindingConfigName);
-        }
+        }        
         
         private void ApplyBehavior(ServiceHost host, string behavior)
         {
@@ -111,7 +100,6 @@ namespace SharpWcf
             throw new ApplicationException("Unable to find behavior with name " + behavior);
         }
 
-
         protected IEnumerable<Uri> GetServiceBaseAddresses(Type serviceType, ServiceConfiguration config)
         {            
             if (config != null && config.BaseAddresses != null)
@@ -127,16 +115,6 @@ namespace SharpWcf
                     );
             }
             return null;
-        }
-
-        protected virtual Type GetImplementedInterface(Type serviceType)
-        {
-            var implementedInterface =
-                serviceType.GetInterfaces()
-                    .FirstOrDefault(i => i.GetCustomAttributes(typeof (ServiceContractAttribute), true).Any());
-            if (implementedInterface == null)
-                throw new ArgumentException(string.Format("Service {0} does not implements any interface marked with ServiceContract", serviceType));
-            return implementedInterface;
-        }
+        }        
     }
 }

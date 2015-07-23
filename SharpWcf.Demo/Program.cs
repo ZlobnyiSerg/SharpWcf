@@ -1,5 +1,6 @@
 ﻿using System;
 using SharpWcf.Configuration;
+using SharpWcf.Demo.Contracts;
 using SharpWcf.Demo.Services;
 
 namespace SharpWcf.Demo
@@ -14,6 +15,9 @@ namespace SharpWcf.Demo
 
             var host2 = r.CreateHost<ServiceB>();
             host2.Open();
+
+            var cli1 = new ClientFactory(ClientsConfiguration.LoadFromJson("clients.config.json")).CreateChannel<IServiceA>();
+            Console.WriteLine(cli1.Operation1());
 
             Console.WriteLine("Services are created and listening. Press ENTER to terminate...");
             Console.ReadLine();
