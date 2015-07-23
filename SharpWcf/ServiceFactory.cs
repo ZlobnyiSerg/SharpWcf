@@ -44,14 +44,15 @@ namespace SharpWcf
         protected virtual void Configure<T, TService>(T host, ServiceConfiguration config) where T : ServiceHost
         {
             var implementedInterface = GetImplementedInterface(typeof (TService));
+            Log.InfoFormat("Service '{0}' endpoints:", implementedInterface.Name);
             foreach (var endpoint in config.Endpoints)
             {
                 var binding = CreateBindingObjectByName(endpoint.Binding, endpoint.BindingConfiguration);
 
                 Uri address;
-                if (endpoint.Address.EndsWith("*"))
+                if (endpoint.Address.Contains("*"))
                 {
-                    address = new Uri(endpoint.Address.TrimEnd('*') + implementedInterface.Name.TrimStart('I'),
+                    address = new Uri(endpoint.Address.Replace("*", TrimInterfaceName(implementedInterface.Name)),
                         UriKind.RelativeOrAbsolute);
                 }
                 else
@@ -69,47 +70,80 @@ namespace SharpWcf
                     addedEndpoint = host.AddServiceEndpoint(endpoint.Contract, binding, address);
                 }
 
-                Log.InfoFormat("Service '{0}' is listening at '{1}'", implementedInterface.Name, addedEndpoint.Address);
+                Log.InfoFormat("\t{0}\n\t\t\tbehavior: {1};\n\t\t\tbinding: {2};\n\t\t\tbinding config: {3}", addedEndpoint.Address, config.Behavior, endpoint.Binding, endpoint.BindingConfiguration);
+
+                if (!string.IsNullOrEmpty(endpoint.BehaviorConfiguration))
+                {
+                    ApplyEndpointBehavior(addedEndpoint, endpoint.BehaviorConfiguration);                    
+                }
+                
             }
 
             if (!string.IsNullOrEmpty(config.Behavior))
             {
-                ApplyBehavior(host, config.Behavior);
+                ApplyServiceBehavior(host, config.Behavior);
             }
-        }        
-        
-        private void ApplyBehavior(ServiceHost host, string behavior)
+        }
+
+        private void ApplyEndpointBehavior(ServiceEndpoint addedEndpoint, string behavior)
         {
-            foreach (ServiceBehaviorElement sbe in _configuration.Behaviors)
+            if (_configuration.Behaviors.EndpointBehaviors == null)
+                return;
+
+            foreach (EndpointBehaviorElement endpointBehavior in _configuration.Behaviors.EndpointBehaviors)
             {
-                if (sbe.Name == behavior)
+                if (endpointBehavior.Name == behavior)
                 {
-                    foreach (var bxe in sbe)
+                    foreach (var bxe in endpointBehavior)
                     {
                         var createBeh = typeof(BehaviorExtensionElement).GetMethod("CreateBehavior",
-                            BindingFlags.Instance | BindingFlags.NonPublic);
-                        var b = (IServiceBehavior)createBeh.Invoke(bxe, new object[0]);
-                        if (!host.Description.Behaviors.Contains(bxe.BehaviorType))
+                                BindingFlags.Instance | BindingFlags.NonPublic);
+                        var b = (IEndpointBehavior)createBeh.Invoke(bxe, new object[0]);
+                        if (!addedEndpoint.Behaviors.Contains(bxe.BehaviorType))
                         {
-                            host.Description.Behaviors.Add(b);
+                            addedEndpoint.Behaviors.Add(b);
                         }
                     }
                     return;
                 }
             }
-            throw new ApplicationException("Unable to find behavior with name " + behavior);
+        }
+        
+        private void ApplyServiceBehavior(ServiceHost host, string behavior)
+        {
+            if (_configuration.Behaviors.ServiceBehaviors != null)
+            {
+                foreach (ServiceBehaviorElement sbe in _configuration.Behaviors.ServiceBehaviors)
+                {
+                    if (sbe.Name == behavior)
+                    {
+                        foreach (var bxe in sbe)
+                        {
+                            var createBeh = typeof (BehaviorExtensionElement).GetMethod("CreateBehavior",
+                                BindingFlags.Instance | BindingFlags.NonPublic);
+                            var b = (IServiceBehavior) createBeh.Invoke(bxe, new object[0]);
+                            if (!host.Description.Behaviors.Contains(bxe.BehaviorType))
+                            {
+                                host.Description.Behaviors.Add(b);
+                            }
+                        }
+                        return;
+                    }
+                }
+                throw new ApplicationException("Unable to find behavior with name " + behavior);
+            }
         }
 
         protected IEnumerable<Uri> GetServiceBaseAddresses(Type serviceType, ServiceConfiguration config)
         {            
             if (config != null && config.BaseAddresses != null)
             {
-                var @interface = GetImplementedInterface(serviceType).Name.TrimStart('I');
+                var @interface = TrimInterfaceName(GetImplementedInterface(serviceType).Name);
 
                 return config.BaseAddresses.Select(ba =>
                 {
-                    if (ba.EndsWith("*"))
-                        ba = ba.TrimEnd('*') + @interface;
+                    if (ba.Contains("*"))
+                        ba = ba.Replace("*", @interface);
                     return new Uri(ba, UriKind.RelativeOrAbsolute);
                 }
                     );

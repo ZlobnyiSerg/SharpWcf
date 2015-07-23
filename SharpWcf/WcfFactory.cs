@@ -30,5 +30,18 @@ namespace SharpWcf
                 throw new ArgumentException(string.Format("Service {0} does not implements any interface marked with ServiceContract", type));
             return implementedInterface;
         }
+
+        protected string TrimInterfaceName(string iface)
+        {
+            if (iface.StartsWith("I") && iface.Length > 2 && Char.IsUpper(iface[1]))
+            {
+                iface = iface.Substring(1);
+            }
+            if (iface.EndsWith("Async"))
+            {
+                iface = iface.Substring(0, iface.Length - 5);
+            }
+            return iface;
+        }
     }
 }

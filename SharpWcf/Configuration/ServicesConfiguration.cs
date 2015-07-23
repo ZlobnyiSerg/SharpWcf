@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.ServiceModel.Configuration;
-using Newtonsoft.Json;
 
 namespace SharpWcf.Configuration
 {
@@ -12,8 +10,8 @@ namespace SharpWcf.Configuration
     /// </summary>
     public class ServicesConfiguration
     {
-        private readonly ServiceBehaviorElementCollection _behaviors;
-        public ServiceBehaviorElementCollection Behaviors
+        private readonly BehaviorsSection _behaviors;
+        public BehaviorsSection Behaviors
         {
             get { return _behaviors; }
         }
@@ -22,9 +20,9 @@ namespace SharpWcf.Configuration
         {
             var appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var serviceGroup = ServiceModelSectionGroup.GetSectionGroup(appConfig);
-            if (serviceGroup != null && serviceGroup.Behaviors != null)
+            if (serviceGroup != null)
             {
-                _behaviors = serviceGroup.Behaviors.ServiceBehaviors;
+                _behaviors = serviceGroup.Behaviors;
             }
         }
 

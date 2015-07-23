@@ -32,7 +32,7 @@ namespace SharpWcf.Configuration
 
         public ClientConfiguration GetClientConfiguration(Type type)
         {
-            var typeName = type.FullName;
+            var typeName = type.Name;
             var baseConfig = Clients.FirstOrDefault(s => s.Types == null);
             var explicitConfig = Clients.FirstOrDefault(s => s.Types != null && s.Types.Contains(typeName));
 

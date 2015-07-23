@@ -6,5 +6,6 @@
         public string BindingConfiguration { get; set; }
         public string Binding { get; set; }
         public string Contract { get; set; }
+        public string BehaviorConfiguration { get; set; }
     }
 }

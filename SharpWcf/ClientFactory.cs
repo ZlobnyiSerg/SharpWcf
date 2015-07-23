@@ -3,12 +3,15 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
+using Common.Logging;
 using SharpWcf.Configuration;
 
 namespace SharpWcf
 {
     public class ClientFactory : WcfFactory
     {
+        protected static readonly ILog Log = LogManager.GetLogger<ClientFactory>();
+
         private readonly ClientsConfiguration _configuration;
 
         public ClientFactory(ClientsConfiguration configuration)
@@ -25,10 +28,10 @@ namespace SharpWcf
             ApplyBehavior(endpoint, config.Behavior);
             endpoint.Binding = CreateBindingObjectByName(config.Binding, config.BindingConfiguration);
             var addr = config.Address;
-            if (addr.EndsWith("*"))
+            if (addr.Contains("*"))
             {
-                var iface = GetImplementedInterface(typeof (TContract)).Name.TrimStart('I');
-                addr = addr.TrimEnd('*') + iface;
+                var iface = TrimInterfaceName(GetImplementedInterface(typeof (TContract)).Name);                
+                addr = addr.Replace("*", iface);
             }
             if (!string.IsNullOrEmpty(config.DnsIdentity))
             {
@@ -38,9 +41,9 @@ namespace SharpWcf
             {
                 endpoint.Address = new EndpointAddress(new Uri(addr, UriKind.RelativeOrAbsolute));
             }
-
+            Log.InfoFormat("Configuring service: {0} with address: {1}; binding {2}; binding config: {3}; behavior: {4} ", typeof(TContract).Name, endpoint.Address, config.Binding, config.BindingConfiguration, config.Behavior);
             return endpoint;            
-        }
+        }        
 
         public TContract CreateClient<TContract>() where TContract : class
         {
