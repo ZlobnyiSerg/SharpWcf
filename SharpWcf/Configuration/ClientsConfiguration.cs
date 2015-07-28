@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Linq;
 using System.ServiceModel.Configuration;
+using System.Web;
 
 namespace SharpWcf.Configuration
 {
@@ -9,7 +10,12 @@ namespace SharpWcf.Configuration
     {
         public ClientsConfiguration()
         {
-            var appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            System.Configuration.Configuration appConfig ;
+            if (HttpContext.Current != null && !HttpContext.Current.Request.PhysicalPath.Equals(string.Empty))
+                appConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+            else
+                appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
             var serviceGroup = ServiceModelSectionGroup.GetSectionGroup(appConfig);
             if (serviceGroup != null && serviceGroup.Behaviors != null)
             {
