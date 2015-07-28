@@ -11,7 +11,7 @@ namespace SharpWcf.Configuration
         public ClientsConfiguration()
         {
             System.Configuration.Configuration appConfig ;
-            if (HttpContext.Current != null && !HttpContext.Current.Request.PhysicalPath.Equals(string.Empty))
+            if (HttpContext.Current != null)
                 appConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
             else
                 appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
