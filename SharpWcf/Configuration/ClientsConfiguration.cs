@@ -23,7 +23,7 @@ namespace SharpWcf.Configuration
             }
         }
 
-        public EndpointBehaviorElementCollection Behaviors { get; }
+        public EndpointBehaviorElementCollection Behaviors { get; private set; }
         public ClientConfiguration[] Clients { get; set; }
 
         /// <summary>
