@@ -57,6 +57,7 @@ namespace SharpWcf.Configuration
             {
                 explicitConfig.BaseAddresses = explicitConfig.BaseAddresses ?? baseConfig.BaseAddresses;
                 explicitConfig.Behavior = explicitConfig.Behavior ?? baseConfig.Behavior;
+                explicitConfig.Endpoints = explicitConfig.Endpoints ?? baseConfig.Endpoints;                
             }
 
             if (explicitConfig == null)
