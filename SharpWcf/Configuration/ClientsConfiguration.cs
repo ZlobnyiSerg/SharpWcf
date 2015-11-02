@@ -13,7 +13,7 @@ namespace SharpWcf.Configuration
         public ClientsConfiguration()
         {
             System.Configuration.Configuration appConfig ;
-            if (HttpContext.Current != null)
+            if (HttpContext.Current != null||HttpRuntime.AppDomainId != null)
                 appConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
             else
                 appConfig = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
