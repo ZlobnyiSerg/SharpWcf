@@ -44,7 +44,7 @@ namespace SharpWcf
         protected virtual void Configure<T, TService>(T host, ServiceConfiguration config) where T : ServiceHost
         {
             var implementedInterface = GetImplementedInterface(typeof (TService));
-            Log.InfoFormat("Service '{0}' endpoints:", implementedInterface.Name);
+            Log.TraceFormat("Service '{0}' endpoints:", implementedInterface.Name);
             foreach (var endpoint in config.Endpoints)
             {
                 var binding = CreateBindingObjectByName(endpoint.Binding, endpoint.BindingConfiguration);
@@ -70,7 +70,7 @@ namespace SharpWcf
                     addedEndpoint = host.AddServiceEndpoint(endpoint.Contract, binding, address);
                 }
 
-                Log.InfoFormat("\t{0}\n\t\t\tbehavior: {1};\n\t\t\tbinding: {2};\n\t\t\tbinding config: {3}", addedEndpoint.Address, config.Behavior, endpoint.Binding, endpoint.BindingConfiguration);
+                Log.TraceFormat("\t{0}\n\t\t\tbehavior: {1};\n\t\t\tbinding: {2};\n\t\t\tbinding config: {3}", addedEndpoint.Address, config.Behavior, endpoint.Binding, endpoint.BindingConfiguration);
 
                 if (!string.IsNullOrEmpty(endpoint.BehaviorConfiguration))
                 {

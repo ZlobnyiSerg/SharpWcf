@@ -41,7 +41,7 @@ namespace SharpWcf
             {
                 endpoint.Address = new EndpointAddress(new Uri(addr, UriKind.RelativeOrAbsolute));
             }
-            Log.InfoFormat("Configuring service: {0} with address: {1}; binding {2}; binding config: {3}; behavior: {4} ", typeof(TContract).Name, endpoint.Address, config.Binding, config.BindingConfiguration, config.Behavior);
+            Log.TraceFormat("Configuring service: {0} with address: {1}; binding {2}; binding config: {3}; behavior: {4} ", typeof(TContract).Name, endpoint.Address, config.Binding, config.BindingConfiguration, config.Behavior);
             return endpoint;            
         }        
 
