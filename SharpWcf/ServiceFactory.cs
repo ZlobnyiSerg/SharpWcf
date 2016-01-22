@@ -32,18 +32,23 @@ namespace SharpWcf
 
         public THost CreateHost<THost, TService>() where THost : ServiceHost
         {
-            var config = _configuration.GetServiceConfiguration(typeof(TService));
+            return CreateHost<THost>(typeof (TService));
+        }
 
-            var host = (THost)HostConstructor(typeof (TService), config);
+        public THost CreateHost<THost>(Type serviceType) where THost : ServiceHost
+        {
+            var config = _configuration.GetServiceConfiguration(serviceType);
 
-            Configure<THost, TService>(host, config);
+            var host = (THost)HostConstructor(serviceType, config);
+
+            Configure<THost>(host, serviceType, config);
 
             return host;
         }
 
-        protected virtual void Configure<T, TService>(T host, ServiceConfiguration config) where T : ServiceHost
+        protected virtual void Configure<T>(T host, Type serviceType, ServiceConfiguration config) where T : ServiceHost
         {
-            var implementedInterface = GetImplementedInterface(typeof (TService));
+            var implementedInterface = GetImplementedInterface(serviceType);
             Log.TraceFormat("Service '{0}' endpoints:", implementedInterface.Name);
             foreach (var endpoint in config.Endpoints)
             {
