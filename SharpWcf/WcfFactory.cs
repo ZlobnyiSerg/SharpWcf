@@ -27,7 +27,7 @@ namespace SharpWcf
                 type.GetInterfaces()
                     .FirstOrDefault(i => i.GetCustomAttributes(typeof(ServiceContractAttribute), true).Any());
             if (implementedInterface == null)
-                throw new ArgumentException(string.Format("Service {0} does not implements any interface marked with ServiceContract", type));
+                return type;
             return implementedInterface;
         }
 

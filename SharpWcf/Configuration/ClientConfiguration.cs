@@ -7,7 +7,6 @@
         public string Behavior { get; set; }
         public string Binding { get; set; }
         public string BindingConfiguration { get; set; }
-
         public string DnsIdentity { get; set; }
     }
 }
