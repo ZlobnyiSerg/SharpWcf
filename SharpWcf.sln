@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpWcf", "SharpWcf\SharpWcf.csproj", "{C33F7633-9255-4AF4-891A-FC58EAD2DC88}"
 EndProject
@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{338FE39B-1218-48C7-91CA-D45E27C7F58E}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
-		SharpWcf.nuspec = SharpWcf.nuspec
+		bin\SharpWcf.nuspec = bin\SharpWcf.nuspec
 	EndProjectSection
 EndProject
 Global
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8449F00F-202D-4B65-A1A6-E22AC12BFB51}
 	EndGlobalSection
 EndGlobal

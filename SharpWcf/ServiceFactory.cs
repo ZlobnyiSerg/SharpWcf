@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
-using Common.Logging;
 using SharpWcf.Configuration;
 
 namespace SharpWcf
 {
     public class ServiceFactory : WcfFactory
     {
-        protected static readonly ILog Log = LogManager.GetLogger<ServicesConfiguration>();
         private readonly ServicesConfiguration _configuration;
 
         public ServiceFactory(ServicesConfiguration configuration)
@@ -37,6 +36,7 @@ namespace SharpWcf
 
         public THost CreateHost<THost>(Type serviceType) where THost : ServiceHost
         {
+            Trace.WriteLine($"Creating host for '{serviceType}'");
             var config = _configuration.GetServiceConfiguration(serviceType);
 
             var host = (THost)HostConstructor(serviceType, config);
@@ -49,7 +49,7 @@ namespace SharpWcf
         protected virtual void Configure<T>(T host, Type serviceType, ServiceConfiguration config) where T : ServiceHost
         {
             var implementedInterface = GetImplementedInterface(serviceType);
-            Log.TraceFormat("Service '{0}' endpoints:", implementedInterface.Name);
+            Trace.Write("Service '{0}' endpoints:", implementedInterface.Name);
             foreach (var endpoint in config.Endpoints)
             {
                 var binding = CreateBindingObjectByName(endpoint.Binding, endpoint.BindingConfiguration);
@@ -75,7 +75,7 @@ namespace SharpWcf
                     addedEndpoint = host.AddServiceEndpoint(endpoint.Contract, binding, address);
                 }
 
-                Log.TraceFormat("\t{0}\n\t\t\tbehavior: {1};\n\t\t\tbinding: {2};\n\t\t\tbinding config: {3}", addedEndpoint.Address, config.Behavior, endpoint.Binding, endpoint.BindingConfiguration);
+                Trace.Write(string.Format("\t{0}\n\t\t\tbehavior: {1};\n\t\t\tbinding: {2};\n\t\t\tbinding config: {3}", addedEndpoint.Address, config.Behavior, endpoint.Binding, endpoint.BindingConfiguration));
 
                 if (!string.IsNullOrEmpty(endpoint.BehaviorConfiguration))
                 {
@@ -146,12 +146,13 @@ namespace SharpWcf
                 var @interface = TrimInterfaceName(GetImplementedInterface(serviceType).Name);
 
                 return config.BaseAddresses.Select(ba =>
-                {
-                    if (ba.Contains("*"))
-                        ba = ba.Replace("*", @interface);
-                    return new Uri(ba, UriKind.RelativeOrAbsolute);
-                }
-                    );
+                    {
+                        if (ba.Contains("*"))
+                            ba = ba.Replace("*", @interface);
+                        Trace.WriteLine($"Type: {serviceType}, base address: {ba}");
+                        return new Uri(ba, UriKind.RelativeOrAbsolute);
+                    }
+                );
             }
             return null;
         }        

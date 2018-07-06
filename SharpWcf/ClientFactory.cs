@@ -1,17 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Configuration;
 using System.ServiceModel.Description;
-using Common.Logging;
 using SharpWcf.Configuration;
 
 namespace SharpWcf
 {
     public class ClientFactory : WcfFactory
-    {
-        protected static readonly ILog Log = LogManager.GetLogger<ClientFactory>();
-
+    {        
         private readonly ClientsConfiguration _configuration;
 
         public ClientFactory(ClientsConfiguration configuration)
@@ -41,7 +39,7 @@ namespace SharpWcf
             {
                 endpoint.Address = new EndpointAddress(new Uri(addr, UriKind.RelativeOrAbsolute));
             }
-            Log.TraceFormat("Configuring service: {0} with address: {1}; binding {2}; binding config: {3}; behavior: {4} ", typeof(TContract).Name, endpoint.Address, config.Binding, config.BindingConfiguration, config.Behavior);
+            Trace.Write(string.Format("Configuring service: {0} with address: {1}; binding {2}; binding config: {3}; behavior: {4} ", typeof(TContract).Name, endpoint.Address, config.Binding, config.BindingConfiguration, config.Behavior));
             return endpoint;            
         }        
 

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Configuration;
 using System.Web;
-using Common.Logging;
 
 namespace SharpWcf.Configuration
 {
     public class ClientsConfiguration
     {
-        protected static ILog Log = LogManager.GetLogger<ClientsConfiguration>();
         public ClientsConfiguration()
         {
             System.Configuration.Configuration appConfig ;
@@ -40,12 +39,12 @@ namespace SharpWcf.Configuration
 
         public ClientConfiguration GetClientConfiguration(Type type)
         {
-            Log.Trace("Resolving client configuration for type: "+type);
+            Trace.Write("Resolving client configuration for type: "+type);
             var typeName = type.Name;
             var baseConfig = Clients.FirstOrDefault(s => s.Types == null);
             var explicitConfig = Clients.FirstOrDefault(s => s.Types != null && s.Types.Contains(typeName));
             if (explicitConfig == null)
-                Log.TraceFormat("No explicit client configuration found for type {0}", typeName);
+                Trace.Write("No explicit client configuration found for type {0}", typeName);
 
             if (explicitConfig == null)
             {
